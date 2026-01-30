@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:LOG-{device_id}-{YYYYMMDD}-{#####}",
  "creation": "2026-01-30 10:30:02.380244",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -58,10 +59,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-30 10:32:30.355795",
+ "modified": "2026-01-30 13:31:07.735308",
  "modified_by": "Administrator",
  "module": "GridFlow Solar",
  "name": "Energy Log",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

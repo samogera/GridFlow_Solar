@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:GF-{facility_type}-{location_code}-{#####}",
  "creation": "2026-01-30 10:22:17.599714",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -62,10 +63,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-30 10:24:47.360223",
+ "modified": "2026-01-30 13:26:10.734823",
  "modified_by": "Administrator",
  "module": "GridFlow Solar",
  "name": "GridFlow Device",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
