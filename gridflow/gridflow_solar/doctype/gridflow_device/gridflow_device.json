@@ -1,0 +1,88 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-30 10:22:17.599714",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "device_id",
+  "status",
+  "column_break_aosp",
+  "phone_number",
+  "wallet_balance",
+  "stellar_wallet",
+  "total_kwh"
+ ],
+ "fields": [
+  {
+   "fieldname": "device_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Device Id",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Active\nInactive\nDisconnected",
+   "reqd": 1
+  },
+  {
+   "fieldname": "wallet_balance",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Wallet Balance",
+   "reqd": 1
+  },
+  {
+   "fieldname": "stellar_wallet",
+   "fieldtype": "Data",
+   "label": "Stellar Wallet"
+  },
+  {
+   "fieldname": "total_kwh",
+   "fieldtype": "Float",
+   "label": "Total kWh",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_aosp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "phone_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Phone Number",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-30 10:24:47.360223",
+ "modified_by": "Administrator",
+ "module": "GridFlow Solar",
+ "name": "GridFlow Device",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
