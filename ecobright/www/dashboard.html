@@ -1,0 +1,62 @@
+{% extends "templates/web.html" %}
+
+{% block page_content %}
+<div class="container" style="padding-top: 50px;">
+    <h3>Inverter Live Stream: <span id="inv-id">INV-001</span></h3>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5>Battery SOC</h5>
+                    <h1 id="val-soc">-- %</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+             <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5>Power Output</h5>
+                    <h1 id="val-power">-- W</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div id="chart-wrapper"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/frappe/js/lib/socket.io.min.js"></script>
+<script src="/assets/frappe/js/frappe/socketio_client.js"></script>
+<script>
+frappe.ready(function() {
+    const inverterId = "INV-001"; // Make dynamic as needed
+
+    // 1. Setup Chart
+    const chart = new frappe.ui.RealtimeChart("#chart-wrapper", "inverter_update", 60, {
+        title: "Real-time Power (Watts)",
+        data: { datasets: [{ name: "Power", values: [] }] },
+        type: 'line',
+        colors: ['#36a2eb']
+    });
+
+    // 2. Subscribe to Room
+    frappe.realtime.on("inverter_update", (payload) => {
+        // Update Text
+        $("#val-soc").text(payload.soc + " %");
+        $("#val-power").text(payload.power_w + " W");
+        
+        // Update Chart
+        chart.update_chart(payload.timestamp, [payload.power_w]);
+    });
+
+    // 3. Trigger the Worker (For testing purposes)
+    // In production, the worker runs automatically.
+    console.log("Listening for stream...");
+});
+</script>
+{% endblock %}

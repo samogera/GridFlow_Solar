@@ -5,6 +5,10 @@ app_description = "Solar management app"
 app_email = "kinuthiaryan01@gmail.com"
 app_license = "mit"
 
+commands = [
+    "ecobright.commands.start_telemetry"
+]
+
 # Apps
 # ------------------
 

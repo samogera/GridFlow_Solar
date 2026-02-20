@@ -1,0 +1,73 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "creation": "2026-02-19 16:02:08.761001",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "section_break_vkwi",
+        "inverter",
+        "timestamp",
+        "power_w",
+        "soc_percent",
+        "energy_today_kwh"
+    ],
+    "fields": [
+        {
+            "fieldname": "section_break_vkwi",
+            "fieldtype": "Section Break"
+        },
+        {
+            "fieldname": "inverter",
+            "fieldtype": "Link",
+            "label": "Inverter",
+            "options": "Grid Inverter"
+        },
+        {
+            "fieldname": "timestamp",
+            "fieldtype": "Datetime",
+            "label": "Timestamp"
+        },
+        {
+            "fieldname": "power_w",
+            "fieldtype": "Float",
+            "label": "Power_w"
+        },
+        {
+            "fieldname": "soc_percent",
+            "fieldtype": "Int",
+            "label": "Soc_percent"
+        },
+        {
+            "fieldname": "energy_today_kwh",
+            "fieldtype": "Float",
+            "label": "Energy_today_kwh"
+        }
+    ],
+    "grid_page_length": 50,
+    "index_web_pages_for_search": 1,
+    "links": [],
+    "modified": "2026-02-19 16:08:22.003004",
+    "modified_by": "Administrator",
+    "module": "Main",
+    "name": "Telemetry Log",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "row_format": "Dynamic",
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}
