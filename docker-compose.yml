@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  backend:
+    build: .
+    image: ecobright:latest
+    volumes:
+      - sites:/home/frappe/frappe-bench/sites
+      - logs:/home/frappe/frappe-bench/logs
+    ports:
+      - "8000:8000"
+    command: 
+      - launch
+    environment:
+      - DB_getHost=db
+      - REDIS_CACHE=redis:6379
+      - REDIS_QUEUE=redis:6379
+      - REDIS_SOCKETIO=redis:6379
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mariadb:10.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_DATABASE=frappe
+    volumes:
+      - db-data:/var/lib/mysql
+
+  redis:
+    image: redis:6.2-alpine
+
+volumes:
+  sites:
+  logs:
+  db-data:
