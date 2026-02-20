@@ -1,6 +1,7 @@
 {
     "actions": [],
     "allow_rename": 1,
+    "autoname": "field:inverter_id",
     "creation": "2026-02-19 14:34:14.326196",
     "doctype": "DocType",
     "engine": "InnoDB",
@@ -33,7 +34,7 @@
         },
         {
             "fieldname": "uid",
-            "fieldtype": "Int",
+            "fieldtype": "Data",
             "in_list_view": 1,
             "label": "Logger Serial",
             "reqd": 1
@@ -41,7 +42,8 @@
         {
             "fieldname": "status",
             "fieldtype": "Select",
-            "label": "Connection Status"
+            "label": "Connection Status",
+            "options": "Online\nOffline\nReconnecting\nError"
         },
         {
             "fieldname": "last_seen",

@@ -1,24 +1,74 @@
 {% extends "templates/web.html" %}
 
+{% block header %}
+<style>
+    .kpi-card {
+        background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+        border-radius: 12px;
+        color: white;
+        padding: 30px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .kpi-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .kpi-card-success {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    }
+
+    .kpi-card h5 {
+        opacity: 0.9;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: white;
+        letter-spacing: 0.5px;
+    }
+
+    .kpi-card h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin: 0;
+        color: white;
+    }
+
+    .dashboard-title {
+        font-weight: 800;
+        color: #2c3e50;
+        margin-bottom: 30px;
+        border-bottom: 4px solid #11998e;
+        display: inline-block;
+        padding-bottom: 10px;
+    }
+
+    #chart-wrapper {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid #f0f0f0;
+    }
+</style>
+{% endblock %}
+
 {% block page_content %}
-<div class="container" style="padding-top: 50px;">
-    <h3>Inverter Live Stream: <span id="inv-id">INV-001</span></h3>
-    
+<div class="container" style="padding-top: 50px; padding-bottom: 50px; font-family: 'Inter', system-ui, sans-serif;">
+    <h3 class="dashboard-title">Live Solar Dashboard: <span id="inv-id">INV-001</span></h3>
+
     <div class="row">
-        <div class="col-md-4">
-            <div class="card bg-success text-white">
-                <div class="card-body">
-                    <h5>Battery SOC</h5>
-                    <h1 id="val-soc">-- %</h1>
-                </div>
+        <div class="col-md-6">
+            <div class="kpi-card kpi-card-success">
+                <h5>🔋 Battery State of Charge</h5>
+                <h1 id="val-soc">-- %</h1>
             </div>
         </div>
-        <div class="col-md-4">
-             <div class="card bg-info text-white">
-                <div class="card-body">
-                    <h5>Power Output</h5>
-                    <h1 id="val-power">-- W</h1>
-                </div>
+        <div class="col-md-6">
+            <div class="kpi-card">
+                <h5>⚡ Live Power Output</h5>
+                <h1 id="val-power">-- W</h1>
             </div>
         </div>
     </div>
@@ -30,33 +80,58 @@
     </div>
 </div>
 
-<script src="/assets/frappe/js/lib/socket.io.min.js"></script>
-<script src="/assets/frappe/js/frappe/socketio_client.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/frappe-charts@1.6.2/dist/frappe-charts.min.iife.js"></script>
 <script>
-frappe.ready(function() {
-    const inverterId = "INV-001"; // Make dynamic as needed
+    frappe.ready(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const inverterId = urlParams.get('inverter') || "INV-001";
+        $("#inv-id").text(inverterId);
 
-    // 1. Setup Chart
-    const chart = new frappe.ui.RealtimeChart("#chart-wrapper", "inverter_update", 60, {
-        title: "Real-time Power (Watts)",
-        data: { datasets: [{ name: "Power", values: [] }] },
-        type: 'line',
-        colors: ['#36a2eb']
+        const chart = new frappe.Chart("#chart-wrapper", {
+            title: "Simulated Live Power Feed (Watts)",
+            data: {
+                labels: [],
+                datasets: [
+                    { name: "Power", values: [] }
+                ]
+            },
+            type: 'line',
+            height: 350,
+            colors: ['#11998e'],
+            lineOptions: { hideDots: 0, regionFill: 1 }
+        });
+
+        let chartLabels = [];
+        let chartData = [];
+
+        setInterval(() => {
+            fetch(`/api/method/ecobright.main.doctype.grid_inverter.grid_inverter.get_telemetry?inverter_id=${inverterId}`)
+                .then(response => response.json())
+                .then(r => {
+                    if (r.message && r.message.soc !== undefined) {
+                        const payload = r.message;
+                        document.getElementById("val-soc").innerText = payload.soc + " %";
+                        document.getElementById("val-power").innerText = payload.power_w + " W";
+
+                        let d = new Date();
+                        let timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+                        chartLabels.push(timeStr);
+                        chartData.push(payload.power_w);
+
+                        if (chartLabels.length > 20) {
+                            chartLabels.shift();
+                            chartData.shift();
+                        }
+
+                        chart.update({
+                            labels: chartLabels,
+                            datasets: [{ name: "Power", values: chartData }]
+                        });
+                    }
+                })
+                .catch(err => console.error("Telemetry fetch error:", err));
+        }, 2000);
     });
-
-    // 2. Subscribe to Room
-    frappe.realtime.on("inverter_update", (payload) => {
-        // Update Text
-        $("#val-soc").text(payload.soc + " %");
-        $("#val-power").text(payload.power_w + " W");
-        
-        // Update Chart
-        chart.update_chart(payload.timestamp, [payload.power_w]);
-    });
-
-    // 3. Trigger the Worker (For testing purposes)
-    // In production, the worker runs automatically.
-    console.log("Listening for stream...");
-});
 </script>
 {% endblock %}

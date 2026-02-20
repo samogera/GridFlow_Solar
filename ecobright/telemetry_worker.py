@@ -24,7 +24,7 @@ def process_telemetry(inverter_id, modbus, last_log_time):
         frappe.publish_realtime(
             event="inverter_update",
             message=data,
-            room=f"inverter_room_{inverter_id}"
+            room="website"
         )
 
         # C. Historical Log (Every 5 Minutes)

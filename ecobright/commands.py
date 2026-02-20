@@ -8,7 +8,7 @@ def start_telemetry(inverter_id):
     """Starts the live telemetry stream for a given inverter."""
     
     # We know the exact name now, so we hardcode it!
-    site_name = "ecobright.localhost"
+    site_name = "ecobright.docker"
             
     click.echo(f"Connecting to database for site: {site_name}...")
     

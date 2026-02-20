@@ -9,8 +9,7 @@ services:
       - logs:/home/frappe/frappe-bench/logs
     ports:
       - "8000:8000"
-    command: 
-      - launch
+    command: bench start
     environment:
       - DB_getHost=db
       - REDIS_CACHE=redis:6379
